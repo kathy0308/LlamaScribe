@@ -39,9 +39,11 @@ function triggerGetRecommendations() {
     chrome.runtime.sendMessage({ type: 'GET_RECOMMENDATIONS', text: userText });
 }
 
+// *** FIXED FUNCTION ***
 function getElementText() {
     if (!activeElement) return '';
-    return activeElement.isContentEditable ? activeElement.innerText : active.value;
+    // Correctly get value from inputs/textareas or innerText from editable divs.
+    return activeElement.isContentEditable ? activeElement.innerText : activeElement.value;
 }
 
 // Listen for a message from the side panel to insert text

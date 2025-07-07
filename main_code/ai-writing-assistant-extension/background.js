@@ -5,6 +5,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
 
     if (message.type === 'GET_RECOMMENDATIONS') {
+        // Immediately tell the side panel to show a loading state
+        chrome.runtime.sendMessage({ type: 'SHOW_LOADING' });
+
         // Get API key and context from storage
         chrome.storage.sync.get(['apiKey', 'contextContent'], async (result) => {
             const { apiKey, contextContent } = result;
@@ -74,3 +77,4 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 chrome.action.onClicked.addListener((tab) => {
     chrome.sidePanel.open({ tabId: tab.id });
 });
+
