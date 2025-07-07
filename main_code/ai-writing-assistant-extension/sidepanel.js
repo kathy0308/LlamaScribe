@@ -16,8 +16,8 @@ chrome.runtime.onMessage.addListener((message) => {
 
 function showLoading() {
     recommendationsContainer.innerHTML = `
-        <div class="text-center text-slate-500 py-8 px-2 animate-pulse">
-            <p class="text-sm">Generating ideas...</p>
+        <div class="loading">
+            <p>Generating ideas...</p>
         </div>
     `;
 }
@@ -31,7 +31,7 @@ function displayRecommendations(suggestions) {
     suggestions.forEach(suggestion => {
         const card = document.createElement('button');
         card.textContent = suggestion;
-        card.className = 'w-full text-left p-3 bg-slate-100 rounded-lg hover:bg-indigo-100 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500';
+        card.className = 'card';
         card.onclick = () => {
             chrome.runtime.sendMessage({ type: 'INSERT_TEXT', text: suggestion });
         };
@@ -41,8 +41,9 @@ function displayRecommendations(suggestions) {
 
 function displayError(message) {
     recommendationsContainer.innerHTML = `
-        <div class="text-center text-red-600 py-8 px-2">
-            <p class="mt-1 text-sm">${message}</p>
+        <div class="error">
+             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg>
+            <p>${message}</p>
         </div>
     `;
 }

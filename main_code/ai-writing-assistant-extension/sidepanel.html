@@ -3,25 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <title>AI Writing Assistant</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <style> body { font-family: 'Inter', sans-serif; } </style>
+    <style>
+        /* Basic Reset & Font */
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            background-color: #f8fafc; /* slate-50 */
+            color: #1e293b; /* slate-800 */
+        }
+        button {
+            border: none;
+            background: none;
+            cursor: pointer;
+            padding: 0;
+            font-family: inherit;
+        }
+        /* Layout */
+        .container { padding: 1rem; }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0; /* slate-200 */
+        }
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .header-title img { width: 2rem; height: 2rem; }
+        .header-title h1 {
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 700;
+            color: #0f172a; /* slate-900 */
+        }
+        .settings-btn svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            color: #64748b; /* slate-500 */
+        }
+        .settings-btn:hover svg { color: #4f46e5; /* indigo-600 */ }
+        /* Recommendations Area */
+        .recommendations { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+        .placeholder, .error, .loading {
+            text-align: center;
+            padding: 2rem 0.5rem;
+            color: #64748b; /* slate-500 */
+        }
+        .placeholder svg, .error svg, .loading svg {
+            margin: 0 auto;
+            width: 2.5rem;
+            height: 2.5rem;
+            color: #94a3b8; /* slate-400 */
+        }
+        .placeholder p, .error p, .loading p { margin-top: 0.5rem; font-size: 0.875rem; }
+        .error { color: #dc2626; /* red-600 */ }
+        .error svg { color: #dc2626; }
+        .loading p { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+        /* Recommendation Card Button */
+        .card {
+            width: 100%;
+            text-align: left;
+            padding: 0.75rem;
+            background-color: #f1f5f9; /* slate-100 */
+            border-radius: 0.5rem;
+            transition: background-color 0.2s;
+        }
+        .card:hover { background-color: #e0e7ff; /* indigo-100 */ }
+        .card:focus { outline: 2px solid #4f46e5; /* indigo-600 */ }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 p-4">
-    <header class="flex items-center justify-between pb-4 border-b border-slate-200">
-        <div class="flex items-center space-x-2">
-            <img src="images/icon48.png" alt="Icon" class="w-8 h-8">
-            <h1 class="text-lg font-bold text-slate-900">AI Assistant</h1>
+<body class="container">
+    <header class="header">
+        <div class="header-title">
+            <img src="images/icon48.png" alt="Icon">
+            <h1>AI Assistant</h1>
         </div>
-        <button id="options-btn" title="Settings">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-slate-500 hover:text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+        <button id="options-btn" title="Settings" class="settings-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.438.995a6.47 6.47 0 010 1.99c0 .382.145.755.438.995l1.003.827c.424.35.534.954.26 1.431l-1.296 2.247a1.125 1.125 0 01-1.37.49l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.127c-.331.183-.581.495-.644.87l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.063-.374-.313-.686-.645-.87a6.52 6.52 0 01-.22-.127c-.324-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.37-.49l-1.296-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.437-.995a6.47 6.47 0 010-1.99c0-.382-.145-.755-.438-.995l-1.004-.827a1.125 1.125 0 01-.26-1.431l1.296-2.247a1.125 1.125 0 011.37-.49l1.217.456c.355.133.75.072 1.076-.124.072-.044.146-.087.22-.127.332-.183.582-.495.645-.87l.212-1.281z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
         </button>
     </header>
 
-    <main id="recommendations-container" class="mt-4 space-y-2">
-        <div id="placeholder" class="text-center text-slate-500 py-8 px-2">
-             <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-10 w-10 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L15.232 5.232z" /></svg>
-            <p class="mt-2 text-sm">Start typing on a page, or select text and right-click to get suggestions.</p>
+    <main id="recommendations-container" class="recommendations">
+        <div id="placeholder" class="placeholder">
+             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" /></svg>
+            <p>Start typing on a page, or select text and right-click to get suggestions.</p>
         </div>
     </main>
 

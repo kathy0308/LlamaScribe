@@ -52,3 +52,4 @@ chrome.runtime.onMessage.addListener((message) => {
         activeElement.focus();
     }
 });
+
