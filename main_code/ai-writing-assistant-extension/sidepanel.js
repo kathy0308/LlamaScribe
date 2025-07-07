@@ -1,9 +1,26 @@
 const recommendationsContainer = document.getElementById('recommendations-container');
+const fileInput = document.getElementById('context-file-input');
+const statusMessage = document.getElementById('status-message');
 
 document.getElementById('options-btn').addEventListener('click', () => {
     chrome.runtime.openOptionsPage();
 });
 
+// Listen for file selection to load context for the session.
+fileInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        // Send the file content to the background script to hold in memory.
+        chrome.runtime.sendMessage({ type: 'UPDATE_CONTEXT', context: e.target.result });
+    };
+    reader.readAsText(file);
+});
+
+
+// Listen for messages from the background script.
 chrome.runtime.onMessage.addListener((message) => {
     if (message.type === 'SHOW_LOADING') {
         showLoading();
@@ -11,15 +28,14 @@ chrome.runtime.onMessage.addListener((message) => {
         displayRecommendations(message.data);
     } else if (message.type === 'SHOW_ERROR') {
         displayError(message.error);
+    } else if (message.type === 'CONTEXT_UPDATED') {
+        statusMessage.textContent = message.status;
+        setTimeout(() => { statusMessage.textContent = ''; }, 3000);
     }
 });
 
 function showLoading() {
-    recommendationsContainer.innerHTML = `
-        <div class="loading">
-            <p>Generating ideas...</p>
-        </div>
-    `;
+    recommendationsContainer.innerHTML = `<div class="loading"><p>Generating ideas...</p></div>`;
 }
 
 function displayRecommendations(suggestions) {
@@ -47,3 +63,4 @@ function displayError(message) {
         </div>
     `;
 }
+

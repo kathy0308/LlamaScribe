@@ -4,86 +4,18 @@
     <meta charset="UTF-8">
     <title>AI Assistant Settings</title>
     <style>
-        /* Basic Reset & Font */
-        body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            margin: 0;
-            background-color: #f1f5f9; /* slate-100 */
-            color: #1e293b; /* slate-800 */
-            display: flex;
-            min-height: 100vh;
-            align-items: center;
-            justify-content: center;
-        }
-        /* Layout */
-        .container {
-            max-width: 500px;
-            width: 100%;
-            background-color: white;
-            padding: 2rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-        }
-        /* Typography */
+        body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; margin: 0; background-color: #f1f5f9; color: #1e293b; display: flex; min-height: 100vh; align-items: center; justify-content: center; }
+        .container { max-width: 500px; width: 100%; background-color: white; padding: 2rem; border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); }
         h1 { font-size: 1.875rem; font-weight: 700; color: #0f172a; }
         .subtitle { color: #475569; margin-bottom: 1.5rem; }
         label { display: block; font-size: 0.875rem; font-weight: 500; color: #334155; }
         .description { font-size: 0.75rem; color: #64748b; margin-top: 0.5rem; }
-        /* Form Elements */
         .form-group { margin-bottom: 1.5rem; }
-        input[type="password"], textarea {
-            margin-top: 0.25rem;
-            display: block;
-            width: 100%;
-            padding: 0.5rem 0.75rem;
-            border: 1px solid #cbd5e1;
-            border-radius: 0.375rem;
-            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            box-sizing: border-box; /* Important for width */
-        }
-        input[type="password"]:focus, textarea:focus {
-            outline: 2px solid #4f46e5;
-            border-color: #4f46e5;
-        }
-        textarea { min-height: 120px; }
-        /* File Input */
-        .file-input-label {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            background-color: #eef2ff; /* indigo-50 */
-            color: #4338ca; /* indigo-700 */
-            border: 1px solid #c7d2fe; /* indigo-200 */
-            border-radius: 0.375rem;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
-        }
-        .file-input-label:hover { background-color: #e0e7ff; }
-        #context-file-input { display: none; } /* Hide the actual file input */
-        #file-name { font-size: 0.75rem; color: #64748b; margin-left: 0.5rem; }
-
-        /* Button */
-        .save-btn {
-            width: 100%;
-            background-color: #4f46e5; /* indigo-600 */
-            color: white;
-            font-weight: 600;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            border: none;
-            cursor: pointer;
-            margin-top: 1.5rem;
-        }
-        .save-btn:hover { background-color: #4338ca; /* indigo-700 */ }
-        /* Status Message */
-        .status {
-            margin-top: 0.75rem;
-            text-align: center;
-            font-size: 0.875rem;
-            font-weight: 500;
-            height: 1.25rem; /* Reserve space to prevent layout shift */
-        }
+        input[type="password"] { margin-top: 0.25rem; display: block; width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 0.375rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); box-sizing: border-box; }
+        input[type="password"]:focus { outline: 2px solid #4f46e5; border-color: #4f46e5; }
+        .save-btn { width: 100%; background-color: #4f46e5; color: white; font-weight: 600; padding: 0.5rem 1rem; border-radius: 0.5rem; border: none; cursor: pointer; }
+        .save-btn:hover { background-color: #4338ca; }
+        .status { margin-top: 0.75rem; text-align: center; font-size: 0.875rem; font-weight: 500; height: 1.25rem; }
     </style>
 </head>
 <body>
@@ -93,18 +25,11 @@
         <div class="form-group">
             <label for="api-key">Gemini API Key</label>
             <input type="password" id="api-key">
-            <p class="description">Your API key is stored securely in your browser.</p>
+            <p class="description">Your API key is required for the extension to work.</p>
         </div>
-        <div class="form-group">
-            <label for="context-content">Custom Context</label>
-            <textarea id="context-content" placeholder="Paste context here, or load it from a file below..."></textarea>
-
-            <input type="file" id="context-file-input" accept=".txt">
-            <label for="context-file-input" class="file-input-label">Load from .txt File</label>
-            <span id="file-name"></span>
-        </div>
+        <p class="description" style="text-align: center; margin-bottom: 1rem;">Context files can now be loaded directly from the side panel.</p>
         <div>
-            <button id="save-btn" class="save-btn">Save Settings</button>
+            <button id="save-btn" class="save-btn">Save API Key</button>
             <div id="status" class="status"></div>
         </div>
     </div>
