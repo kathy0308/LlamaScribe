@@ -1,9 +1,11 @@
 let typingTimer;
-const doneTypingInterval = 1500; // Time in milliseconds to wait after user stops typing.
+const doneTypingInterval = 1000; // Time in milliseconds to wait after user stops typing.
 
-// Listen for keyup events anywhere on the page. This is a more reliable approach.
+console.log('AI Assistant (Content Script): Loaded and running.');
+
+// Listen for keyup events anywhere on the page.
 document.addEventListener('keyup', (e) => {
-    // First, check if the event happened inside a valid text input area.
+    // Check if the event happened inside a valid text input area.
     if (e.target.matches('textarea, input[type="text"], [contenteditable="true"]')) {
         const target = e.target;
         const text = target.isContentEditable ? target.innerText : target.value;
@@ -14,8 +16,8 @@ document.addEventListener('keyup', (e) => {
         // If there's enough text, set a timer to get recommendations.
         if (text && text.trim().length > 20) {
             typingTimer = setTimeout(() => {
-                // After the user has stopped typing for the specified interval,
-                // send the text to the background script to get recommendations.
+                console.log('AI Assistant (Content Script): Timer finished. Sending text to background:', text);
+                // Send the text to the background script to get recommendations.
                 chrome.runtime.sendMessage({ type: 'GET_RECOMMENDATIONS', text: text });
             }, doneTypingInterval);
         }
