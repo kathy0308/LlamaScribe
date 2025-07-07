@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "AI Writing Assistant",
+    "name": "Llama Scribe",
     "version": "3.0",
     "description": "Get AI-powered sentence recommendations in a convenient side panel.",
     "permissions": [
