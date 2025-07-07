@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "AI Writing Assistant",
-    "version": "2.2",
+    "version": "3.0",
     "description": "Get AI-powered sentence recommendations in a convenient side panel.",
     "permissions": [
       "storage",
@@ -39,4 +39,3 @@
       "128": "images/icon128.png"
     }
   }
-

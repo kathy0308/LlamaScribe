@@ -1,66 +1,54 @@
-console.log('AI Assistant (Content): Script loaded.');
-
 let typingTimer;
 const doneTypingInterval = 1500;
 let activeElement = null;
 
+// Listen for when a user clicks into a text field.
 document.addEventListener('focusin', (e) => {
     if (e.target.matches('textarea, input[type="text"], [contenteditable="true"]')) {
         activeElement = e.target;
-        console.log('AI Assistant (Content): Focused on element:', activeElement);
         activeElement.addEventListener('keyup', handleKeyUp);
-        activeElement.addEventListener('keydown', handleKeyDown);
     }
 });
 
+// Stop listening when the user clicks out of the text field.
 document.addEventListener('focusout', (e) => {
     if (activeElement) {
         activeElement.removeEventListener('keyup', handleKeyUp);
-        activeElement.removeEventListener('keydown', handleKeyDown);
         clearTimeout(typingTimer);
         activeElement = null;
     }
 });
 
+// When the user stops typing, get recommendations.
 function handleKeyUp() {
     clearTimeout(typingTimer);
-    if (getElementText().trim().length > 20) {
-        typingTimer = setTimeout(triggerGetRecommendations, doneTypingInterval);
+    const text = getActiveElementText();
+    if (text && text.trim().length > 20) {
+        typingTimer = setTimeout(() => {
+            chrome.runtime.sendMessage({ type: 'GET_RECOMMENDATIONS', text: text });
+        }, doneTypingInterval);
     }
 }
 
-function handleKeyDown() {
-    clearTimeout(typingTimer);
-}
-
-function triggerGetRecommendations() {
-    if (!activeElement) return;
-    const userText = getElementText();
-    console.log('AI Assistant (Content): Triggering recommendations with text:', userText);
-
-    chrome.runtime.sendMessage({ type: 'open_side_panel' });
-    chrome.runtime.sendMessage({ type: 'GET_RECOMMENDATIONS', text: userText });
-}
-
-function getElementText() {
+// Helper to get text from either a standard input or a complex editor.
+function getActiveElementText() {
     if (!activeElement) return '';
     return activeElement.isContentEditable ? activeElement.innerText : activeElement.value;
 }
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.type === 'INSERT_TEXT') {
-        console.log('AI Assistant (Content): Received request to insert text:', message.text);
-        if (activeElement) {
-            const currentText = getElementText();
-            const separator = currentText.endsWith(' ') || currentText.length === 0 ? '' : ' ';
-            const textToInsert = separator + message.text;
+// Listen for the 'paste' command from the side panel.
+chrome.runtime.onMessage.addListener((message) => {
+    if (message.type === 'INSERT_TEXT' && activeElement) {
+        const currentText = getActiveElementText();
+        const separator = currentText.endsWith(' ') || currentText.length === 0 ? '' : ' ';
+        const textToInsert = separator + message.text;
 
-            if (activeElement.isContentEditable) {
-                document.execCommand('insertText', false, textToInsert);
-            } else {
-                activeElement.value += textToInsert;
-            }
-            activeElement.focus();
+        if (activeElement.isContentEditable) {
+            // This is the most reliable way to insert into complex editors like Google Docs.
+            document.execCommand('insertText', false, textToInsert);
+        } else {
+            activeElement.value += textToInsert;
         }
+        activeElement.focus();
     }
 });
