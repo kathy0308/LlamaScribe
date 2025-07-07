@@ -6,21 +6,16 @@ document.getElementById('options-btn').addEventListener('click', () => {
     chrome.runtime.openOptionsPage();
 });
 
-// Listen for file selection to load context for the session.
 fileInput.addEventListener('change', (event) => {
     const file = event.target.files[0];
     if (!file) return;
-
     const reader = new FileReader();
     reader.onload = (e) => {
-        // Send the file content to the background script to hold in memory.
         chrome.runtime.sendMessage({ type: 'UPDATE_CONTEXT', context: e.target.result });
     };
     reader.readAsText(file);
 });
 
-
-// Listen for messages from the background script.
 chrome.runtime.onMessage.addListener((message) => {
     if (message.type === 'SHOW_LOADING') {
         showLoading();
@@ -48,8 +43,8 @@ function displayRecommendations(suggestions) {
         const card = document.createElement('button');
         card.textContent = suggestion;
         card.className = 'card';
-        card.onclick = () => {
-            chrome.runtime.sendMessage({ type: 'INSERT_TEXT', text: suggestion });
+        card.onclick = (e) => {
+            copyToClipboard(suggestion, e.currentTarget);
         };
         recommendationsContainer.appendChild(card);
     });
@@ -64,3 +59,19 @@ function displayError(message) {
     `;
 }
 
+// Helper function to copy text to the clipboard and provide user feedback.
+function copyToClipboard(text, element) {
+    navigator.clipboard.writeText(text).then(() => {
+        const originalText = element.textContent;
+        element.textContent = 'Copied!';
+        element.classList.add('copied');
+
+        setTimeout(() => {
+            element.textContent = originalText;
+            element.classList.remove('copied');
+        }, 1500);
+    }).catch(err => {
+        console.error('Failed to copy text: ', err);
+        element.textContent = 'Copy Failed';
+    });
+}

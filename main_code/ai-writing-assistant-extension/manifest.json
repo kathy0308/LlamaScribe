@@ -1,13 +1,14 @@
 {
   "manifest_version": 3,
   "name": "LLAMA SCRIBE",
-  "version": "4.0",
+  "version": "4.1",
   "description": "Get AI-powered sentence recommendations in a convenient side panel.",
   "permissions": [
     "storage",
     "sidePanel",
     "activeTab",
-    "contextMenus"
+    "contextMenus",
+    "clipboardWrite"
   ],
   "host_permissions": [
     "https://generativelanguage.googleapis.com/"
