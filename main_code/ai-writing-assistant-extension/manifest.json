@@ -1,12 +1,13 @@
 {
     "manifest_version": 3,
     "name": "AI Writing Assistant",
-    "version": "2.0",
+    "version": "2.2",
     "description": "Get AI-powered sentence recommendations in a convenient side panel.",
     "permissions": [
       "storage",
       "sidePanel",
-      "activeTab"
+      "activeTab",
+      "contextMenus"
     ],
     "host_permissions": [
       "https://generativelanguage.googleapis.com/"
@@ -38,3 +39,4 @@
       "128": "images/icon128.png"
     }
   }
+

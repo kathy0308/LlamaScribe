@@ -1,10 +1,13 @@
+console.log('AI Assistant (Content): Script loaded.');
+
 let typingTimer;
-const doneTypingInterval = 1500; // 1.5 seconds
+const doneTypingInterval = 1500;
 let activeElement = null;
 
 document.addEventListener('focusin', (e) => {
     if (e.target.matches('textarea, input[type="text"], [contenteditable="true"]')) {
         activeElement = e.target;
+        console.log('AI Assistant (Content): Focused on element:', activeElement);
         activeElement.addEventListener('keyup', handleKeyUp);
         activeElement.addEventListener('keydown', handleKeyDown);
     }
@@ -33,22 +36,20 @@ function handleKeyDown() {
 function triggerGetRecommendations() {
     if (!activeElement) return;
     const userText = getElementText();
+    console.log('AI Assistant (Content): Triggering recommendations with text:', userText);
 
-    // Tell background script to open the panel and get recommendations
     chrome.runtime.sendMessage({ type: 'open_side_panel' });
     chrome.runtime.sendMessage({ type: 'GET_RECOMMENDATIONS', text: userText });
 }
 
-// *** FIXED FUNCTION ***
 function getElementText() {
     if (!activeElement) return '';
-    // Correctly get value from inputs/textareas or innerText from editable divs.
     return activeElement.isContentEditable ? activeElement.innerText : activeElement.value;
 }
 
-// Listen for a message from the side panel to insert text
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.type === 'INSERT_TEXT') {
+        console.log('AI Assistant (Content): Received request to insert text:', message.text);
         if (activeElement) {
             const currentText = getElementText();
             const separator = currentText.endsWith(' ') || currentText.length === 0 ? '' : ' ';
