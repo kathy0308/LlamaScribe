@@ -1,17 +1,18 @@
 {
     "manifest_version": 3,
     "name": "AI Writing Assistant",
-    "version": "1.1",
-    "description": "Get AI-powered sentence recommendations on any website.",
+    "version": "2.0",
+    "description": "Get AI-powered sentence recommendations in a convenient side panel.",
     "permissions": [
       "storage",
+      "sidePanel",
       "activeTab"
     ],
     "host_permissions": [
       "https://generativelanguage.googleapis.com/"
     ],
     "action": {
-      "default_popup": "popup.html",
+      "default_title": "Open AI Writing Assistant",
       "default_icon": {
         "16": "images/icon16.png",
         "48": "images/icon48.png",
@@ -24,10 +25,12 @@
     "content_scripts": [
       {
         "matches": ["<all_urls>"],
-        "js": ["content.js"],
-        "css": ["content.css"]
+        "js": ["content.js"]
       }
     ],
+    "side_panel": {
+      "default_path": "sidepanel.html"
+    },
     "options_page": "options.html",
     "icons": {
       "16": "images/icon16.png",

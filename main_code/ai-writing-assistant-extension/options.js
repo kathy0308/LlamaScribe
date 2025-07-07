@@ -3,7 +3,6 @@ const contextContentInput = document.getElementById('context-content');
 const saveBtn = document.getElementById('save-btn');
 const statusEl = document.getElementById('status');
 
-// Load saved settings when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     chrome.storage.sync.get(['apiKey', 'contextContent'], (result) => {
         if (result.apiKey) {
@@ -15,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Save settings when the save button is clicked
 saveBtn.addEventListener('click', () => {
     const apiKey = apiKeyInput.value.trim();
     const contextContent = contextContentInput.value.trim();

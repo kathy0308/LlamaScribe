@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Writing Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .recommendation-card { transition: background-color 0.2s; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 p-4">
+    <header class="flex items-center justify-between pb-4 border-b border-slate-200">
+        <div class="flex items-center space-x-2">
+            <img src="images/icon48.png" alt="Icon" class="w-8 h-8">
+            <h1 class="text-lg font-bold text-slate-900">AI Assistant</h1>
+        </div>
+        <button id="options-btn" title="Settings">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-slate-500 hover:text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+        </button>
+    </header>
+
+    <main id="recommendations-container" class="mt-4 space-y-2">
+        <div id="placeholder" class="text-center text-slate-500 py-8 px-2">
+             <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-10 w-10 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L15.232 5.232z" /></svg>
+            <p class="mt-2 text-sm">Start typing on the page. Suggestions will appear here.</p>
+        </div>
+    </main>
+
+    <script src="sidepanel.js"></script>
+</body>
+</html>
